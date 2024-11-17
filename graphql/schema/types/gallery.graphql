@@ -27,6 +27,7 @@ type Gallery {
   studio: Studio
   image_count: Int!
   tags: [Tag!]!
+  characters: [Character!]!
   performers: [Performer!]!
 
   cover: Image
@@ -49,6 +50,7 @@ input GalleryCreateInput {
   scene_ids: [ID!]
   studio_id: ID
   tag_ids: [ID!]
+  chracter_ids: [ID!]
   performer_ids: [ID!]
 }
 
@@ -68,6 +70,7 @@ input GalleryUpdateInput {
   scene_ids: [ID!]
   studio_id: ID
   tag_ids: [ID!]
+  chracter_ids: [ID!]
   performer_ids: [ID!]
 
   primary_file_id: ID
@@ -88,6 +91,7 @@ input BulkGalleryUpdateInput {
   scene_ids: BulkUpdateIds
   studio_id: ID
   tag_ids: BulkUpdateIds
+  chracter_ids: BulkUpdateIds
   performer_ids: BulkUpdateIds
 }
 

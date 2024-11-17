@@ -8,6 +8,7 @@ type SceneMarker {
   end_seconds: Float
   primary_tag: Tag!
   tags: [Tag!]!
+  characters: [Character!]!
   created_at: Time!
   updated_at: Time!
 
@@ -28,6 +29,7 @@ input SceneMarkerCreateInput {
   scene_id: ID!
   primary_tag_id: ID!
   tag_ids: [ID!]
+  character_ids: [ID!]
 }
 
 input SceneMarkerUpdateInput {
@@ -40,6 +42,7 @@ input SceneMarkerUpdateInput {
   scene_id: ID
   primary_tag_id: ID
   tag_ids: [ID!]
+  character_ids: [ID!]
 }
 
 type FindSceneMarkersResultType {

@@ -18,6 +18,7 @@ type Group {
   synopsis: String
   urls: [String!]!
   tags: [Tag!]!
+  characters: [Character!]!
   created_at: Time!
   updated_at: Time!
 
@@ -49,6 +50,7 @@ input GroupCreateInput {
   synopsis: String
   urls: [String!]
   tag_ids: [ID!]
+  character_ids: [ID!]
 
   containing_groups: [GroupDescriptionInput!]
   sub_groups: [GroupDescriptionInput!]
@@ -72,6 +74,7 @@ input GroupUpdateInput {
   synopsis: String
   urls: [String!]
   tag_ids: [ID!]
+  character_ids: [ID!]
 
   containing_groups: [GroupDescriptionInput!]
   sub_groups: [GroupDescriptionInput!]
@@ -96,6 +99,7 @@ input BulkGroupUpdateInput {
   director: String
   urls: BulkUpdateStrings
   tag_ids: BulkUpdateIds
+  character_ids: BulkUpdateIds
 
   containing_groups: BulkUpdateGroupDescriptionsInput
   sub_groups: BulkUpdateGroupDescriptionsInput

@@ -76,6 +76,7 @@ type Scene {
   groups: [SceneGroup!]!
   movies: [SceneMovie!]! @deprecated(reason: "Use groups")
   tags: [Tag!]!
+  characters: [Character!]!
   performers: [Performer!]!
   stash_ids: [StashID!]!
 
@@ -110,6 +111,7 @@ input SceneCreateInput {
   groups: [SceneGroupInput!]
   movies: [SceneMovieInput!] @deprecated(reason: "Use groups")
   tag_ids: [ID!]
+  character_ids: [ID!]
   "This should be a URL or a base64 encoded data URL"
   cover_image: String
   stash_ids: [StashIDInput!]
@@ -143,6 +145,7 @@ input SceneUpdateInput {
   groups: [SceneGroupInput!]
   movies: [SceneMovieInput!] @deprecated(reason: "Use groups")
   tag_ids: [ID!]
+  character_ids: [ID!]
   "This should be a URL or a base64 encoded data URL"
   cover_image: String
   stash_ids: [StashIDInput!]
@@ -188,6 +191,7 @@ input BulkSceneUpdateInput {
   gallery_ids: BulkUpdateIds
   performer_ids: BulkUpdateIds
   tag_ids: BulkUpdateIds
+  character_ids: BulkUpdateIds
   group_ids: BulkUpdateIds
   movie_ids: BulkUpdateIds @deprecated(reason: "Use group_ids")
 }
@@ -242,6 +246,7 @@ type SceneParserResult {
   performer_ids: [ID!]
   movies: [SceneMovieID!]
   tag_ids: [ID!]
+  character_ids: [ID!]
 }
 
 type SceneParserResultType {

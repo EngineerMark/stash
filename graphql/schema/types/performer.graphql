@@ -36,6 +36,7 @@ type Performer {
   alias_list: [String!]!
   favorite: Boolean!
   tags: [Tag!]!
+  characters: [Character!]!
   ignore_auto_tag: Boolean!
 
   image_path: String # Resolver
@@ -83,6 +84,7 @@ input PerformerCreateInput {
   instagram: String @deprecated(reason: "Use urls")
   favorite: Boolean
   tag_ids: [ID!]
+  character_ids: [ID!]
   "This should be a URL or a base64 encoded data URL"
   image: String
   stash_ids: [StashIDInput!]
@@ -119,6 +121,7 @@ input PerformerUpdateInput {
   instagram: String @deprecated(reason: "Use urls")
   favorite: Boolean
   tag_ids: [ID!]
+  character_ids: [ID!]
   "This should be a URL or a base64 encoded data URL"
   image: String
   stash_ids: [StashIDInput!]
@@ -160,6 +163,7 @@ input BulkPerformerUpdateInput {
   instagram: String @deprecated(reason: "Use urls")
   favorite: Boolean
   tag_ids: BulkUpdateIds
+  character_ids: BulkUpdateIds
   # rating expressed as 1-100
   rating100: Int
   details: String
