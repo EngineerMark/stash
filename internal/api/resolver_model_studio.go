@@ -54,6 +54,20 @@ func (r *studioResolver) Tags(ctx context.Context, obj *models.Studio) (ret []*m
 	return ret, firstError(errs)
 }
 
+func (r *studioResolver) Characters(ctx context.Context, obj *models.Studio) (ret []*models.Character, err error) {
+	if !obj.CharacterIDs.Loaded() {
+		if err := r.withReadTxn(ctx, func(ctx context.Context) error {
+			return obj.LoadCharacterIDs(ctx, r.repository.Studio)
+		}); err != nil {
+			return nil, err
+		}
+	}
+
+	var errs []error
+	ret, errs = loaders.From(ctx).CharacterByID.LoadAll(obj.CharacterIDs.List())
+	return ret, firstError(errs)
+}
+
 func (r *studioResolver) SceneCount(ctx context.Context, obj *models.Studio, depth *int) (ret int, err error) {
 	if err := r.withReadTxn(ctx, func(ctx context.Context) error {
 		ret, err = scene.CountByStudioID(ctx, r.repository.Scene, obj.ID, depth)

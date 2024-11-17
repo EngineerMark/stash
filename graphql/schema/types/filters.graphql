@@ -178,6 +178,7 @@ input PerformerFilterType {
   galleries_filter: GalleryFilterType
   "Filter by related tags that meet this criteria"
   tags_filter: TagFilterType
+  characters_filter: CharacterFilterType
   "Filter by creation time"
   created_at: TimestampCriterionInput
   "Filter by last update time"
@@ -311,6 +312,7 @@ input SceneFilterType {
   studios_filter: StudioFilterType
   "Filter by related tags that meet this criteria"
   tags_filter: TagFilterType
+  characters_filter: CharacterFilterType
   "Filter by related movies that meet this criteria"
   movies_filter: MovieFilterType
     @deprecated(reason: "use groups_filter instead")
@@ -522,6 +524,7 @@ input GalleryFilterType {
   studios_filter: StudioFilterType
   "Filter by related tags that meet this criteria"
   tags_filter: TagFilterType
+  characters_filter: CharacterFilterType
 }
 
 input TagFilterType {
@@ -582,6 +585,64 @@ input TagFilterType {
 
   "Filter by autotag ignore value"
   ignore_auto_tag: Boolean
+
+  "Filter by related scenes that meet this criteria"
+  scenes_filter: SceneFilterType
+  "Filter by related images that meet this criteria"
+  images_filter: ImageFilterType
+  "Filter by related galleries that meet this criteria"
+  galleries_filter: GalleryFilterType
+
+  "Filter by creation time"
+  created_at: TimestampCriterionInput
+
+  "Filter by last update time"
+  updated_at: TimestampCriterionInput
+}
+
+input CharacterFilterType {
+  AND: CharacterFilterType
+  OR: CharacterFilterType
+  NOT: CharacterFilterType
+
+  "Filter by tag name"
+  name: StringCriterionInput
+
+  "Filter by tag aliases"
+  aliases: StringCriterionInput
+
+  "Filter by favorite"
+  favorite: Boolean
+
+  "Filter by tag description"
+  description: StringCriterionInput
+
+  "Filter to only include tags missing this property"
+  is_missing: String
+
+  "Filter by number of scenes with this tag"
+  scene_count: IntCriterionInput
+
+  "Filter by number of images with this tag"
+  image_count: IntCriterionInput
+
+  "Filter by number of galleries with this tag"
+  gallery_count: IntCriterionInput
+
+  "Filter by number of performers with this tag"
+  performer_count: IntCriterionInput
+
+  "Filter by number of studios with this tag"
+  studio_count: IntCriterionInput
+
+  "Filter by number of movies with this tag"
+  movie_count: IntCriterionInput
+
+  "Filter by number of group with this tag"
+  group_count: IntCriterionInput
+
+  "Filter by number of markers with this tag"
+  marker_count: IntCriterionInput
 
   "Filter by related scenes that meet this criteria"
   scenes_filter: SceneFilterType

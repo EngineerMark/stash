@@ -124,6 +124,20 @@ func (r *imageResolver) Tags(ctx context.Context, obj *models.Image) (ret []*mod
 	return ret, firstError(errs)
 }
 
+func (r *imageResolver) Characters(ctx context.Context, obj *models.Image) (ret []*models.Character, err error) {
+	if !obj.CharacterIDs.Loaded() {
+		if err := r.withReadTxn(ctx, func(ctx context.Context) error {
+			return obj.LoadCharacterIDs(ctx, r.repository.Image)
+		}); err != nil {
+			return nil, err
+		}
+	}
+
+	var errs []error
+	ret, errs = loaders.From(ctx).CharacterByID.LoadAll(obj.CharacterIDs.List())
+	return ret, firstError(errs)
+}
+
 func (r *imageResolver) Performers(ctx context.Context, obj *models.Image) (ret []*models.Performer, err error) {
 	if !obj.PerformerIDs.Loaded() {
 		if err := r.withReadTxn(ctx, func(ctx context.Context) error {

@@ -38,6 +38,11 @@ type SceneMarkerTagFinder interface {
 	FindBySceneMarkerID(ctx context.Context, sceneMarkerID int) ([]*models.Tag, error)
 }
 
+type SceneMarkerCharacterFinder interface {
+	models.CharacterGetter
+	FindBySceneMarkerID(ctx context.Context, sceneMarkerID int) ([]*models.Character, error)
+}
+
 type CaptionFinder interface {
 	GetCaptions(ctx context.Context, fileID models.FileID) ([]*models.VideoCaption, error)
 }
@@ -49,6 +54,7 @@ type sceneRoutes struct {
 	captionFinder     CaptionFinder
 	sceneMarkerFinder SceneMarkerFinder
 	tagFinder         SceneMarkerTagFinder
+	characterFinder   SceneMarkerCharacterFinder
 }
 
 func (rs sceneRoutes) Routes() chi.Router {

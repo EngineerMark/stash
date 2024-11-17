@@ -73,6 +73,20 @@ func (r groupResolver) Tags(ctx context.Context, obj *models.Group) (ret []*mode
 	return ret, firstError(errs)
 }
 
+func (r groupResolver) Characters(ctx context.Context, obj *models.Group) (ret []*models.Character, err error) {
+	if !obj.CharacterIDs.Loaded() {
+		if err := r.withReadTxn(ctx, func(ctx context.Context) error {
+			return obj.LoadCharacterIDs(ctx, r.repository.Group)
+		}); err != nil {
+			return nil, err
+		}
+	}
+
+	var errs []error
+	ret, errs = loaders.From(ctx).CharacterByID.LoadAll(obj.CharacterIDs.List())
+	return ret, firstError(errs)
+}
+
 func (r groupResolver) relatedGroups(ctx context.Context, rgd models.RelatedGroupDescriptions) (ret []*GroupDescription, err error) {
 	// rgd must be loaded
 	gds := rgd.List()

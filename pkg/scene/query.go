@@ -145,6 +145,18 @@ func CountByTagID(ctx context.Context, r models.SceneQueryer, id int, depth *int
 	return r.QueryCount(ctx, filter, nil)
 }
 
+func CountByCharacterID(ctx context.Context, r models.SceneQueryer, id int, depth *int) (int, error) {
+	filter := &models.SceneFilterType{
+		Characters: &models.HierarchicalMultiCriterionInput{
+			Value:    []string{strconv.Itoa(id)},
+			Modifier: models.CriterionModifierIncludes,
+			Depth:    depth,
+		},
+	}
+
+	return r.QueryCount(ctx, filter, nil)
+}
+
 func CountByGroupID(ctx context.Context, r models.SceneQueryer, id int, depth *int) (int, error) {
 	filter := &models.SceneFilterType{
 		Groups: &models.HierarchicalMultiCriterionInput{

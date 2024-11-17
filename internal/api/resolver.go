@@ -87,6 +87,9 @@ func (r *Resolver) Subscription() SubscriptionResolver {
 func (r *Resolver) Tag() TagResolver {
 	return &tagResolver{r}
 }
+func (r *Resolver) Character() CharacterResolver {
+	return &characterResolver{r}
+}
 func (r *Resolver) GalleryFile() GalleryFileResolver {
 	return &galleryFileResolver{r}
 }
@@ -123,6 +126,7 @@ type groupResolver struct{ *Resolver }
 type movieResolver struct{ *groupResolver }
 
 type tagResolver struct{ *Resolver }
+type characterResolver struct{ *Resolver }
 type galleryFileResolver struct{ *Resolver }
 type videoFileResolver struct{ *Resolver }
 type imageFileResolver struct{ *Resolver }
@@ -185,6 +189,7 @@ func (r *queryResolver) Stats(ctx context.Context) (*StatsResultType, error) {
 		performerQB := repo.Performer
 		movieQB := repo.Group
 		tagQB := repo.Tag
+		characterQB := repo.Character
 
 		// embrace the error
 
@@ -238,6 +243,11 @@ func (r *queryResolver) Stats(ctx context.Context) (*StatsResultType, error) {
 			return err
 		}
 
+		charactersCount, err := characterQB.Count(ctx)
+		if err != nil {
+			return err
+		}
+
 		scenesTotalOCount, err := sceneQB.GetAllOCount(ctx)
 		if err != nil {
 			return err
@@ -275,6 +285,7 @@ func (r *queryResolver) Stats(ctx context.Context) (*StatsResultType, error) {
 			GroupCount:        groupsCount,
 			MovieCount:        groupsCount,
 			TagCount:          tagsCount,
+			CharacterCount:    charactersCount,
 			TotalOCount:       totalOCount,
 			TotalPlayDuration: totalPlayDuration,
 			TotalPlayCount:    totalPlayCount,

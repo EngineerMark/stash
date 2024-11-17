@@ -45,11 +45,6 @@ type FindCharactersResultType {
   characters: [Character!]!
 }
 
-input CharactersMergeInput {
-  source: [ID!]!
-  destination: ID!
-}
-
 input BulkCharacterUpdateInput {
   ids: [ID!]
   description: String

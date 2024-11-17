@@ -40,6 +40,7 @@ type Scene struct {
 	URLs         RelatedStrings  `json:"urls"`
 	GalleryIDs   RelatedIDs      `json:"gallery_ids"`
 	TagIDs       RelatedIDs      `json:"tag_ids"`
+	CharacterIDs RelatedIDs      `json:"character_ids"`
 	PerformerIDs RelatedIDs      `json:"performer_ids"`
 	Groups       RelatedGroups   `json:"groups"`
 	StashIDs     RelatedStashIDs `json:"stash_ids"`
@@ -73,6 +74,7 @@ type ScenePartial struct {
 	URLs          *UpdateStrings
 	GalleryIDs    *UpdateIDs
 	TagIDs        *UpdateIDs
+	CharacterIDs  *UpdateIDs
 	PerformerIDs  *UpdateIDs
 	GroupIDs      *UpdateGroupIDs
 	StashIDs      *UpdateStashIDs
@@ -139,6 +141,12 @@ func (s *Scene) LoadTagIDs(ctx context.Context, l TagIDLoader) error {
 	})
 }
 
+func (s *Scene) LoadCharacterIDs(ctx context.Context, l CharacterIDLoader) error {
+	return s.CharacterIDs.load(func() ([]int, error) {
+		return l.GetCharacterIDs(ctx, s.ID)
+	})
+}
+
 func (s *Scene) LoadGroups(ctx context.Context, l SceneGroupLoader) error {
 	return s.Groups.load(func() ([]GroupsScenes, error) {
 		return l.GetGroups(ctx, s.ID)
@@ -165,6 +173,10 @@ func (s *Scene) LoadRelationships(ctx context.Context, l SceneReader) error {
 	}
 
 	if err := s.LoadTagIDs(ctx, l); err != nil {
+		return err
+	}
+
+	if err := s.LoadCharacterIDs(ctx, l); err != nil {
 		return err
 	}
 
@@ -212,6 +224,7 @@ func (s ScenePartial) UpdateInput(id int) SceneUpdateInput {
 		PerformerIds: s.PerformerIDs.IDStrings(),
 		Movies:       s.GroupIDs.SceneMovieInputs(),
 		TagIds:       s.TagIDs.IDStrings(),
+		CharacterIds: s.CharacterIDs.IDStrings(),
 		StashIds:     stashIDs.ToStashIDInputs(),
 	}
 

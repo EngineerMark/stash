@@ -40,6 +40,17 @@ func (r *sceneMarkerResolver) Tags(ctx context.Context, obj *models.SceneMarker)
 	return ret, err
 }
 
+func (r *sceneMarkerResolver) Characters(ctx context.Context, obj *models.SceneMarker) (ret []*models.Character, err error) {
+	if err := r.withReadTxn(ctx, func(ctx context.Context) error {
+		ret, err = r.repository.Character.FindBySceneMarkerID(ctx, obj.ID)
+		return err
+	}); err != nil {
+		return nil, err
+	}
+
+	return ret, err
+}
+
 func (r *sceneMarkerResolver) Stream(ctx context.Context, obj *models.SceneMarker) (string, error) {
 	baseURL, _ := ctx.Value(BaseURLCtxKey).(string)
 	return urlbuilders.NewSceneMarkerURLBuilder(baseURL, obj).GetStreamURL(), nil

@@ -126,6 +126,20 @@ func (r *galleryResolver) Tags(ctx context.Context, obj *models.Gallery) (ret []
 	return ret, firstError(errs)
 }
 
+func (r *galleryResolver) Characters(ctx context.Context, obj *models.Gallery) (ret []*models.Character, err error) {
+	if !obj.CharacterIDs.Loaded() {
+		if err := r.withReadTxn(ctx, func(ctx context.Context) error {
+			return obj.LoadCharacterIDs(ctx, r.repository.Gallery)
+		}); err != nil {
+			return nil, err
+		}
+	}
+
+	var errs []error
+	ret, errs = loaders.From(ctx).CharacterByID.LoadAll(obj.CharacterIDs.List())
+	return ret, firstError(errs)
+}
+
 func (r *galleryResolver) Performers(ctx context.Context, obj *models.Gallery) (ret []*models.Performer, err error) {
 	if !obj.PerformerIDs.Loaded() {
 		if err := r.withReadTxn(ctx, func(ctx context.Context) error {

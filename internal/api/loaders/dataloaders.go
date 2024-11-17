@@ -56,6 +56,7 @@ type Loaders struct {
 	PerformerByID *PerformerLoader
 	StudioByID    *StudioLoader
 	TagByID       *TagLoader
+	CharacterByID *CharacterLoader
 	GroupByID     *GroupLoader
 	FileByID      *FileLoader
 }
@@ -97,6 +98,11 @@ func (m Middleware) Middleware(next http.Handler) http.Handler {
 				wait:     wait,
 				maxBatch: maxBatch,
 				fetch:    m.fetchTags(ctx),
+			},
+			CharacterByID: &CharacterLoader{
+				wait:     wait,
+				maxBatch: maxBatch,
+				fetch:    m.fetchCharacters(ctx),
 			},
 			GroupByID: &GroupLoader{
 				wait:     wait,
@@ -230,6 +236,17 @@ func (m Middleware) fetchTags(ctx context.Context) func(keys []int) ([]*models.T
 		err := m.Repository.WithDB(ctx, func(ctx context.Context) error {
 			var err error
 			ret, err = m.Repository.Tag.FindMany(ctx, keys)
+			return err
+		})
+		return ret, toErrorSlice(err)
+	}
+}
+
+func (m Middleware) fetchCharacters(ctx context.Context) func(keys []int) ([]*models.Character, []error) {
+	return func(keys []int) (ret []*models.Character, errs []error) {
+		err := m.Repository.WithDB(ctx, func(ctx context.Context) error {
+			var err error
+			ret, err = m.Repository.Character.FindMany(ctx, keys)
 			return err
 		})
 		return ret, toErrorSlice(err)

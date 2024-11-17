@@ -36,6 +36,7 @@ type Image struct {
 
 	GalleryIDs   RelatedIDs `json:"gallery_ids"`
 	TagIDs       RelatedIDs `json:"tag_ids"`
+	CharacterIDs RelatedIDs `json:"character_ids"`
 	PerformerIDs RelatedIDs `json:"performer_ids"`
 }
 
@@ -64,6 +65,7 @@ type ImagePartial struct {
 
 	GalleryIDs    *UpdateIDs
 	TagIDs        *UpdateIDs
+	CharacterIDs  *UpdateIDs
 	PerformerIDs  *UpdateIDs
 	PrimaryFileID *FileID
 }
@@ -121,6 +123,12 @@ func (i *Image) LoadPerformerIDs(ctx context.Context, l PerformerIDLoader) error
 func (i *Image) LoadTagIDs(ctx context.Context, l TagIDLoader) error {
 	return i.TagIDs.load(func() ([]int, error) {
 		return l.GetTagIDs(ctx, i.ID)
+	})
+}
+
+func (i *Image) LoadCharacterIDs(ctx context.Context, l CharacterIDLoader) error {
+	return i.CharacterIDs.load(func() ([]int, error) {
+		return l.GetCharacterIDs(ctx, i.ID)
 	})
 }
 

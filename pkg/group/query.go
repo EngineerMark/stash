@@ -31,6 +31,18 @@ func CountByTagID(ctx context.Context, r models.GroupQueryer, id int, depth *int
 	return r.QueryCount(ctx, filter, nil)
 }
 
+func CountByCharacterID(ctx context.Context, r models.GroupQueryer, id int, depth *int) (int, error) {
+	filter := &models.GroupFilterType{
+		Characters: &models.HierarchicalMultiCriterionInput{
+			Value:    []string{strconv.Itoa(id)},
+			Modifier: models.CriterionModifierIncludes,
+			Depth:    depth,
+		},
+	}
+
+	return r.QueryCount(ctx, filter, nil)
+}
+
 func CountByContainingGroupID(ctx context.Context, r models.GroupQueryer, id int, depth *int) (int, error) {
 	filter := &models.GroupFilterType{
 		ContainingGroups: &models.HierarchicalMultiCriterionInput{

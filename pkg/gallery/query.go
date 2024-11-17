@@ -41,3 +41,15 @@ func CountByTagID(ctx context.Context, r models.GalleryQueryer, id int, depth *i
 
 	return r.QueryCount(ctx, filter, nil)
 }
+
+func CountByCharacterID(ctx context.Context, r models.GalleryQueryer, id int, depth *int) (int, error) {
+	filter := &models.GalleryFilterType{
+		Characters: &models.HierarchicalMultiCriterionInput{
+			Value:    []string{strconv.Itoa(id)},
+			Modifier: models.CriterionModifierIncludes,
+			Depth:    depth,
+		},
+	}
+
+	return r.QueryCount(ctx, filter, nil)
+}

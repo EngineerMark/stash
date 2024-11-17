@@ -27,6 +27,9 @@ const (
 	Tag             = "tag"
 	DefaultTagImage = "tag/tag.svg"
 
+	Character 		   		= "character"
+	DefaultCharacterImage 	= "character/character.svg"
+
 	Studio             = "studio"
 	DefaultStudioImage = "studio/studio.svg"
 

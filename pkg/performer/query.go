@@ -31,6 +31,18 @@ func CountByTagID(ctx context.Context, r models.PerformerQueryer, id int, depth 
 	return r.QueryCount(ctx, filter, nil)
 }
 
+func CountByCharacterID(ctx context.Context, r models.PerformerQueryer, id int, depth *int) (int, error) {
+	filter := &models.PerformerFilterType{
+		Characters: &models.HierarchicalMultiCriterionInput{
+			Value:    []string{strconv.Itoa(id)},
+			Modifier: models.CriterionModifierIncludes,
+			Depth:    depth,
+		},
+	}
+
+	return r.QueryCount(ctx, filter, nil)
+}
+
 func CountByAppearsWith(ctx context.Context, r models.PerformerQueryer, id int) (int, error) {
 	filter := &models.PerformerFilterType{
 		Performers: &models.MultiCriterionInput{

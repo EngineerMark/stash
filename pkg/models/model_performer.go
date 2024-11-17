@@ -33,10 +33,11 @@ type Performer struct {
 	Weight        *int   `json:"weight"`
 	IgnoreAutoTag bool   `json:"ignore_auto_tag"`
 
-	Aliases  RelatedStrings  `json:"aliases"`
-	URLs     RelatedStrings  `json:"urls"`
-	TagIDs   RelatedIDs      `json:"tag_ids"`
-	StashIDs RelatedStashIDs `json:"stash_ids"`
+	Aliases  		RelatedStrings  `json:"aliases"`
+	URLs     		RelatedStrings  `json:"urls"`
+	TagIDs   		RelatedIDs      `json:"tag_ids"`
+	CharacterIDs 	RelatedIDs 		`json:"character_ids"`
+	StashIDs 		RelatedStashIDs `json:"stash_ids"`
 }
 
 func NewPerformer() Performer {
@@ -77,9 +78,10 @@ type PerformerPartial struct {
 	Weight        OptionalInt
 	IgnoreAutoTag OptionalBool
 
-	Aliases  *UpdateStrings
-	TagIDs   *UpdateIDs
-	StashIDs *UpdateStashIDs
+	Aliases  		*UpdateStrings
+	TagIDs   		*UpdateIDs
+	CharacterIDs 	*UpdateIDs
+	StashIDs 		*UpdateStashIDs
 }
 
 func NewPerformerPartial() PerformerPartial {
@@ -107,6 +109,12 @@ func (s *Performer) LoadTagIDs(ctx context.Context, l TagIDLoader) error {
 	})
 }
 
+func (s *Performer) LoadCharacterIDs(ctx context.Context, l CharacterIDLoader) error {
+	return s.CharacterIDs.load(func() ([]int, error) {
+		return l.GetCharacterIDs(ctx, s.ID)
+	})
+}
+
 func (s *Performer) LoadStashIDs(ctx context.Context, l StashIDLoader) error {
 	return s.StashIDs.load(func() ([]StashID, error) {
 		return l.GetStashIDs(ctx, s.ID)
@@ -119,6 +127,10 @@ func (s *Performer) LoadRelationships(ctx context.Context, l PerformerReader) er
 	}
 
 	if err := s.LoadTagIDs(ctx, l); err != nil {
+		return err
+	}
+
+	if err := s.LoadCharacterIDs(ctx, l); err != nil {
 		return err
 	}
 

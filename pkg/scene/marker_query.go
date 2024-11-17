@@ -18,3 +18,15 @@ func MarkerCountByTagID(ctx context.Context, r models.SceneMarkerQueryer, id int
 
 	return r.QueryCount(ctx, filter, nil)
 }
+
+func MarkerCountByCharacterID(ctx context.Context, r models.SceneMarkerQueryer, id int, depth *int) (int, error) {
+	filter := &models.SceneMarkerFilterType{
+		Characters: &models.HierarchicalMultiCriterionInput{
+			Value:    []string{strconv.Itoa(id)},
+			Modifier: models.CriterionModifierIncludes,
+			Depth:    depth,
+		},
+	}
+
+	return r.QueryCount(ctx, filter, nil)
+}

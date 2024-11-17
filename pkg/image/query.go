@@ -81,6 +81,18 @@ func CountByTagID(ctx context.Context, r QueryCounter, id int, depth *int) (int,
 	return r.QueryCount(ctx, filter, nil)
 }
 
+func CountByCharacterID(ctx context.Context, r QueryCounter, id int, depth *int) (int, error) {
+	filter := &models.ImageFilterType{
+		Characters: &models.HierarchicalMultiCriterionInput{
+			Value:    []string{strconv.Itoa(id)},
+			Modifier: models.CriterionModifierIncludes,
+			Depth:    depth,
+		},
+	}
+
+	return r.QueryCount(ctx, filter, nil)
+}
+
 func FindByGalleryID(ctx context.Context, r Queryer, galleryID int, sortBy string, sortDir models.SortDirectionEnum) ([]*models.Image, error) {
 	perPage := -1
 

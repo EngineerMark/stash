@@ -18,9 +18,10 @@ type Studio struct {
 	Details       string `json:"details"`
 	IgnoreAutoTag bool   `json:"ignore_auto_tag"`
 
-	Aliases  RelatedStrings  `json:"aliases"`
-	TagIDs   RelatedIDs      `json:"tag_ids"`
-	StashIDs RelatedStashIDs `json:"stash_ids"`
+	Aliases  		RelatedStrings  `json:"aliases"`
+	TagIDs   		RelatedIDs      `json:"tag_ids"`
+	CharacterIDs 	RelatedIDs  	`json:"character_ids"`
+	StashIDs 		RelatedStashIDs `json:"stash_ids"`
 }
 
 func NewStudio() Studio {
@@ -45,9 +46,10 @@ type StudioPartial struct {
 	UpdatedAt     OptionalTime
 	IgnoreAutoTag OptionalBool
 
-	Aliases  *UpdateStrings
-	TagIDs   *UpdateIDs
-	StashIDs *UpdateStashIDs
+	Aliases  		*UpdateStrings
+	TagIDs   		*UpdateIDs
+	CharacterIDs 	*UpdateIDs
+	StashIDs 		*UpdateStashIDs
 }
 
 func NewStudioPartial() StudioPartial {
@@ -69,6 +71,12 @@ func (s *Studio) LoadTagIDs(ctx context.Context, l TagIDLoader) error {
 	})
 }
 
+func (s *Studio) LoadCharacterIDs(ctx context.Context, l CharacterIDLoader) error {
+	return s.CharacterIDs.load(func() ([]int, error) {
+		return l.GetCharacterIDs(ctx, s.ID)
+	})
+}
+
 func (s *Studio) LoadStashIDs(ctx context.Context, l StashIDLoader) error {
 	return s.StashIDs.load(func() ([]StashID, error) {
 		return l.GetStashIDs(ctx, s.ID)
@@ -81,6 +89,10 @@ func (s *Studio) LoadRelationships(ctx context.Context, l PerformerReader) error
 	}
 
 	if err := s.LoadTagIDs(ctx, l); err != nil {
+		return err
+	}
+
+	if err := s.LoadCharacterIDs(ctx, l); err != nil {
 		return err
 	}
 

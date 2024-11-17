@@ -66,3 +66,15 @@ func CountByTagID(ctx context.Context, qb models.StudioQueryer, id int, depth *i
 
 	return qb.QueryCount(ctx, filter, nil)
 }
+
+func CountByCharacterID(ctx context.Context, qb models.StudioQueryer, id int, depth *int) (int, error) {
+	filter := &models.StudioFilterType{
+		Characters: &models.HierarchicalMultiCriterionInput{
+			Value:    []string{strconv.Itoa(id)},
+			Modifier: models.CriterionModifierIncludes,
+			Depth:    depth,
+		},
+	}
+
+	return qb.QueryCount(ctx, filter, nil)
+}

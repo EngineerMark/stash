@@ -108,6 +108,13 @@ type Query {
     ids: [ID!]
   ): FindTagsResultType!
 
+  findCharacter(id: ID!): Character
+  findCharacters(
+    character_filter: CharacterFilterType
+    filter: FindFilterType
+    ids: [ID!]
+  ): FindCharactersResultType!
+
   "Retrieve random scene markers for the wall"
   markerWall(q: String): [SceneMarker!]!
   "Retrieve random scenes for the wall"
@@ -231,6 +238,7 @@ type Query {
 
   allPerformers: [Performer!]!
   allTags: [Tag!]! @deprecated(reason: "Use findTags instead")
+  allCharacters: [Character!]! @deprecated(reason: "Use findCharacters instead")
   allStudios: [Studio!]! @deprecated(reason: "Use findStudios instead")
   allMovies: [Movie!]! @deprecated(reason: "Use findGroups instead")
 
@@ -371,6 +379,13 @@ type Mutation {
   tagsDestroy(ids: [ID!]!): Boolean!
   tagsMerge(input: TagsMergeInput!): Tag
   bulkTagUpdate(input: BulkTagUpdateInput!): [Tag!]
+
+  characterCreate(input: CharacterCreateInput!): Character
+  characterUpdate(input: CharacterUpdateInput!): Character
+  characterDestroy(input: CharacterDestroyInput!): Boolean!
+  charactersDestroy(ids: [ID!]!): Boolean!
+  bulkCharacterUpdate(input: BulkCharacterUpdateInput!): [Character!]
+
 
   """
   Moves the given files to the given destination. Returns true if successful.

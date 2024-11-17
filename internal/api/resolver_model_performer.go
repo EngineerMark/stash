@@ -146,6 +146,20 @@ func (r *performerResolver) Tags(ctx context.Context, obj *models.Performer) (re
 	return ret, firstError(errs)
 }
 
+func (r *performerResolver) Characters(ctx context.Context, obj *models.Performer) (ret []*models.Character, err error) {
+	if !obj.CharacterIDs.Loaded() {
+		if err := r.withReadTxn(ctx, func(ctx context.Context) error {
+			return obj.LoadCharacterIDs(ctx, r.repository.Performer)
+		}); err != nil {
+			return nil, err
+		}
+	}
+
+	var errs []error
+	ret, errs = loaders.From(ctx).CharacterByID.LoadAll(obj.CharacterIDs.List())
+	return ret, firstError(errs)
+}
+
 func (r *performerResolver) SceneCount(ctx context.Context, obj *models.Performer) (ret int, err error) {
 	if err := r.withReadTxn(ctx, func(ctx context.Context) error {
 		ret, err = r.repository.Scene.CountByPerformerID(ctx, obj.ID)
